@@ -53,25 +53,25 @@ MCPクライアントを初期化し、バックエンドサーバーと通信�
 export async function initializeClient() {
   // クライアントインスタンスを作成
   client = new Client({
-    name: 'mcp-streaming-chat-frontend',
-    version: '1.0.0',
-  })
+    name: "mcp-streaming-chat-frontend",
+    version: "1.0.0",
+  });
 
   // トランスポートを作成
   transport = new StreamableHTTPClientTransport(new URL(SERVER_URL), {
     sessionId, // 既存のセッションIDがあれば使用
     requestInit: {
       headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json, text/event-stream', // JSONとSSEの両方を受け入れる
+        "Content-Type": "application/json",
+        Accept: "application/json, text/event-stream", // JSONとSSEの両方を受け入れる
       },
-      credentials: 'include',
-      mode: 'cors',
+      credentials: "include",
+      mode: "cors",
     },
-  })
+  });
 
   // サーバーに接続
-  await client.connect(transport)
+  await client.connect(transport);
 
   // ...
 }
@@ -79,18 +79,21 @@ export async function initializeClient() {
 // ストリーミングチャットメッセージを送信
 export async function sendStreamingChatMessage(
   message: string,
-  onChunkReceived: (text: string, metadata: any) => void
+  onChunkReceived: (text: string, metadata: any) => void,
 ) {
   // ...
 
   // 通知ハンドラを設定
-  mcpClient.setNotificationHandler(LoggingMessageNotificationSchema, (notification) => {
-    const text = notification.params.data as string
-    const metadata = notification.params.metadata || {}
+  mcpClient.setNotificationHandler(
+    LoggingMessageNotificationSchema,
+    (notification) => {
+      const text = notification.params.data as string;
+      const metadata = notification.params.metadata || {};
 
-    // コールバック関数を呼び出してチャンクを通知
-    onChunkReceived(text, metadata)
-  })
+      // コールバック関数を呼び出してチャンクを通知
+      onChunkReceived(text, metadata);
+    },
+  );
 
   // ...
 }
@@ -103,12 +106,13 @@ export async function sendStreamingChatMessage(
 ```tsx
 export default function ChatClient() {
   // 状態変数の定義
-  const [sessionId, setSessionId] = useState<string | undefined>()
-  const [messages, setMessages] = useState<Message[]>([])
-  const [inputMessage, setInputMessage] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [connectionState, setConnectionState] = useState<ConnectionState>('connecting')
+  const [sessionId, setSessionId] = useState<string | undefined>();
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [inputMessage, setInputMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [connectionState, setConnectionState] =
+    useState<ConnectionState>("connecting");
 
   // ...
 
@@ -117,16 +121,19 @@ export default function ChatClient() {
     // ...
 
     // ストリーミングチャットメッセージを送信
-    await sendStreamingChatMessage(userMessage.text, (text: string, metadata: any) => {
-      // 各チャンクを受信したときのコールバック
-      setMessages((prevMessages) => {
-        // メッセージを更新
-        // ...
-      })
-    })
+    await sendStreamingChatMessage(
+      userMessage.text,
+      (text: string, metadata: any) => {
+        // 各チャンクを受信したときのコールバック
+        setMessages((prevMessages) => {
+          // メッセージを更新
+          // ...
+        });
+      },
+    );
 
     // ...
-  }
+  };
 
   // UIのレンダリング
   return (
@@ -135,7 +142,7 @@ export default function ChatClient() {
       {/* メッセージ表示エリア */}
       {/* メッセージ入力エリア */}
     </div>
-  )
+  );
 }
 ```
 
@@ -161,7 +168,7 @@ export default function ChatClient() {
         style={{ width: `${message.progress}%` }}
       ></div>
     </div>
-  )
+  );
 }
 
 {
@@ -170,7 +177,7 @@ export default function ChatClient() {
 {
   message.isStreaming && (
     <span className="ml-1 inline-block w-2 h-4 bg-transparent border-r-2 border-current animate-pulse"></span>
-  )
+  );
 }
 ```
 
@@ -181,20 +188,20 @@ export default function ChatClient() {
 ```tsx
 <div
   className={`px-3 py-1 rounded-full text-sm font-medium ${
-    connectionState === 'connected'
-      ? 'bg-green-100 text-green-800'
-      : connectionState === 'connecting'
-        ? 'bg-yellow-100 text-yellow-800'
-        : 'bg-red-100 text-red-800'
+    connectionState === "connected"
+      ? "bg-green-100 text-green-800"
+      : connectionState === "connecting"
+        ? "bg-yellow-100 text-yellow-800"
+        : "bg-red-100 text-red-800"
   }`}
 >
-  {connectionState === 'connected'
-    ? '接続済み'
-    : connectionState === 'connecting'
-      ? '接続中...'
-      : connectionState === 'reconnecting'
-        ? '再接続中...'
-        : '切断'}
+  {connectionState === "connected"
+    ? "接続済み"
+    : connectionState === "connecting"
+      ? "接続中..."
+      : connectionState === "reconnecting"
+        ? "再接続中..."
+        : "切断"}
 </div>
 ```
 

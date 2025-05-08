@@ -1,7 +1,5 @@
 # MCP Streaming Chat
 
-![MCP Streaming Chat](https://storage.googleapis.com/zenn-user-upload/599d8d43c22d-20250506.png)
-
 ## 概要
 
 MCP Streaming Chatは、最新のModel Context Protocol（MCP）仕様（2025-03-26）を活用したストリーミングチャットアプリケーションです。このプロジェクトは、MCPのStreamable HTTPトランスポートを使用して、サーバーからクライアントへのリアルタイムなメッセージストリーミングを実現しています。
