@@ -267,7 +267,7 @@ export default function ChatClient() {
         setMessages((prevMessages) => [...prevMessages, placeholderMessage]);
 
         // ストリーミングチャットメッセージを送信
-        await sendStreamingChatMessage(
+        const streamingResponse = await sendStreamingChatMessage(
           userMessage.text,
           (
             text: string,
@@ -307,6 +307,9 @@ export default function ChatClient() {
             });
           },
         );
+
+        // レスポンスをコンソールに出力（追加）
+        console.log("ストリーミングチャットのレスポンス:", streamingResponse);
       } else {
         // 通常モードの場合（ストリーミングOFF）
         // ボットの応答用のプレースホルダーを追加
@@ -343,6 +346,9 @@ export default function ChatClient() {
             });
           },
         );
+
+        // レスポンスをコンソールに出力（追加）
+        console.log("非ストリーミングチャットのレスポンス:", response);
 
         // 応答がコールバックで処理されなかった場合のフォールバック
         // 注意: chat.tsが空のテキストを返すように変更されたため、
